@@ -96,7 +96,7 @@ module.exports = {
           }, {
             loader: 'less-loader',
             options: {
-              paths: ['./node_modules/patternfly/node_modules'],
+              paths: ['./node_modules', './node_modules/patternfly/node_modules'],
               sourceMap: true
             }
           }
