@@ -7,7 +7,7 @@ var gulp = require('gulp'),
   del = require('del'),
   fs = require("fs"),
   htmlMinifier = require('html-minifier'),
-  lessCompiler = require('gulp-less'),
+  sassCompiler = require('gulp-sass'),
   ngc = require('gulp-ngc'),
   path = require('path'),
   postcss = require('postcss'),
@@ -49,12 +49,12 @@ function updateWatchDist() {
     .pipe(gulp.dest(watchDist));
 }
 
-// Build LESS
-function transpileLESS(src) {
+// Build SASS
+function transpileSASS(src) {
   return gulp.src(src)
     .pipe(sourcemaps.init())
-    .pipe(lessCompiler({
-      paths: [ path.join(__dirname, 'less', 'includes') ]
+    .pipe(sassCompiler({
+      paths: [ path.join(__dirname, 'sass', 'includes') ]
     }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(function (file) {
@@ -62,12 +62,12 @@ function transpileLESS(src) {
     }));
 }
 
-// Build and minify LESS separately
-function transpileMinifyLESS(src) {
+// Build and minify SASS separately
+function transpileMinifySASS(src) {
   return gulp.src(src)
     .pipe(sourcemaps.init())
-    .pipe(lessCompiler({
-      paths: [ path.join(__dirname, 'less', 'includes') ]
+    .pipe(sassCompiler({
+      paths: [ path.join(__dirname, 'sass', 'includes') ]
     }))
     .pipe(cssmin().on('error', function(err) {
       console.log(err);
@@ -100,7 +100,7 @@ function minifyTemplate(file) {
 // Stylelint task
 gulp.task('lint-css', function lintCssTask() {
   return gulp
-    .src(['./src/assets/stylesheets/*.less', './src/app/**/*.less'])
+    .src(['./src/assets/stylesheets/*.scss', './src/app/**/*.scss'])
     .pipe(stylelint({
       failAfterError: true,
       reporters: [
@@ -109,14 +109,14 @@ gulp.task('lint-css', function lintCssTask() {
     }));
 });
 
-// Less compilation
-gulp.task('transpile-less', ['lint-css'], function () {
-  return transpileLESS(appSrc + '/assets/stylesheets/*.less');
+// SASS compilation
+gulp.task('transpile-sass', ['lint-css'], function () {
+  return transpileSASS(appSrc + '/assets/stylesheets/*.scss');
 });
 
-// Less compilation and minifiction
-gulp.task('min-css', ['transpile-less'], function () {
-  return transpileMinifyLESS(appSrc + '/assets/stylesheets/*.less');
+// SASS compilation and minifiction
+gulp.task('min-css', ['transpile-sass'], function () {
+  return transpileMinifySASS(appSrc + '/assets/stylesheets/*.scss');
 });
 
 // Put the files back to normal 'transpile',
@@ -124,7 +124,7 @@ gulp.task('build',
   [
     'transpile',
     'copy-css',
-    'copy-less'
+    'copy-sass'
   ]);
 
 // Build the components
@@ -152,16 +152,16 @@ gulp.task('copy-css', ['min-css'], function () {
     }));
 });
 
-// Copy component LESS to dist/less in a flattened directory
-gulp.task('copy-less', ['copy-assets-less'], function () {
-  return gulp.src(['./src/app/**/*.less'].concat(globalExcludes))
+// Copy component SASS to dist/sass in a flattened directory
+gulp.task('copy-sass', ['copy-assets-sass'], function () {
+  return gulp.src(['./src/app/**/*.scss'].concat(globalExcludes))
     .pipe(rename({dirname: ''}))
-    .pipe(gulp.dest(libraryDist + '/less'));
+    .pipe(gulp.dest(libraryDist + '/sass'));
 });
 
-// Copy asset LESS to dist/less and replace relative paths for flattened directory
-gulp.task('copy-assets-less', function () {
-  return gulp.src(['./src/assets/stylesheets/*.less'])
+// Copy asset SASS to dist/sass and replace relative paths for flattened directory
+gulp.task('copy-assets-sass', function () {
+  return gulp.src(['./src/assets/stylesheets/*.scss'])
     .pipe(replace(/\.\.\/.\.\/.\.\//g, function () {
       return '../../../../';
     }))
@@ -169,7 +169,7 @@ gulp.task('copy-assets-less', function () {
       return '@import \'';
     }))
     .pipe(rename({dirname: ''}))
-    .pipe(gulp.dest(libraryDist + '/less'));
+    .pipe(gulp.dest(libraryDist + '/sass'));
 });
 
 // Copy example files to dist-demo (e.g., HTML and Typscript for docs)
@@ -191,9 +191,9 @@ gulp.task('watch', ['build', 'copy-watch-all'], function () {
   gulp.watch([appSrc + '/app/**/*.ts', '!' + appSrc + '/app/**/*.spec.ts'], ['transpile', 'post-transpile', 'copy-watch']).on('change', function (e) {
     console.log('TypeScript file ' + e.path + ' has been changed. Compiling.');
   });
-  gulp.watch([appSrc + '/app/**/*.less'], ['min-less']).on('change', function (e) {
+  gulp.watch([appSrc + '/app/**/*.scss'], ['min-css']).on('change', function (e) {
     console.log(e.path + ' has been changed. Updating.');
-    transpileLESS(e.path);
+    transpileSASS(e.path);
     updateWatchDist();
   });
   gulp.watch([appSrc + '/app/**/*.html']).on('change', function (e) {

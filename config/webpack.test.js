@@ -138,10 +138,9 @@ module.exports = function (options) {
             {
               loader: "css-loader"
             },
-          ],
-
+          ]
         }, {
-          test: /\.less$/,
+          test: /\.scss$/,
           loaders: [
             {
               loader: 'css-to-string-loader'
@@ -152,7 +151,7 @@ module.exports = function (options) {
                 context: '/'
               }
             }, {
-              loader: 'less-loader',
+              loader: 'sass-loader',
               options: {
                 paths: [
                   './node_modules/patternfly/node_modules'

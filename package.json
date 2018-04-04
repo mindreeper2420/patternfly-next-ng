@@ -1,5 +1,5 @@
 {
-  "name": "patternfly-ng",
+  "name": "@patternfly/patternfly-next-ng",
   "version": "0.0.0-semantically-released",
   "description": "A collection of PatternFly Angular components and other useful things to be shared.",
   "main": "bundles/patternfly-ng.umd.js",
@@ -68,15 +68,9 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "patternfly": "^3.28.0"
+    "@patternfly/patternfly-next-workshop": "0.0.4"
   },
-  "optionalDependencies": {
-    "@swimlane/ngx-datatable": "^11.1.7",
-    "angular-tree-component": "^6.0.0 || ^7.0.0",
-    "c3": "^0.4.15",
-    "ng2-dragula": "^1.5.0",
-    "ngx-bootstrap": "^1.8.0 || ^2.0.0"
-  },
+  "optionalDependencies": {},
   "devDependencies": {
     "@angular/animations": "^4.0.1",
     "@angular/common": "^4.0.1",
@@ -95,6 +89,8 @@
     "@types/lodash": "4.14.54",
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "3.1.2",
+    "bootstrap": "~3.3.7",
+    "bootstrap-sass": "^3.3.7",
     "child_process": "1.0.2",
     "clean-webpack-plugin": "0.1.15",
     "codelyzer": "4.0.0",
@@ -107,13 +103,14 @@
     "del": "2.2.2",
     "extract-text-webpack-plugin": "2.1.0",
     "file-loader": "0.10.1",
+    "font-awesome-sass": "^4.7.0",
     "gulp": "3.9.1",
     "gulp-changed": "2.0.0",
     "gulp-cssmin": "0.2.0",
-    "gulp-less": "3.3.0",
     "gulp-ngc": "0.2.0",
     "gulp-replace": "0.6.1",
     "gulp-rename": "1.2.2",
+    "gulp-sass": "^3.2.1",
     "gulp-sourcemaps": "2.4.1",
     "gulp-string-replace": "1.0.0",
     "gulp-stylelint": "5.0.0",
@@ -143,6 +140,7 @@
     "npm-run-all": "4.0.2",
     "nsp": "2.7.0",
     "optimize-js-plugin": "0.0.4",
+    "patternfly": "^3.42.0",
     "patternfly-eng-publish": "0.0.4",
     "patternfly-eng-release": "3.26.54",
     "phantomjs-prebuilt": "2.1.14",
@@ -151,6 +149,8 @@
     "reflect-metadata": "0.1.10",
     "rimraf": "2.6.1",
     "rxjs": "^5.0.1",
+    "sass": "^1.1.1",
+    "sass-loader": "^6.0.7",
     "semantic-release": "6.3.6",
     "source-map-loader": "0.1.6",
     "style-loader": "0.13.2",

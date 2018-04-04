@@ -1,0 +1,11 @@
+<button class="pf-c-button" title="{{tooltip}}"
+        [disabled]="disabled"
+        [ngClass]="{
+          'pf-is-danger': type === 'danger',
+          'pf-is-primary': type === 'primary',
+          'pf-is-secondary': type === 'secondary',
+          'pf-is-tertiary': type === 'tertiary'
+        }"
+        (click)="handleAction($event)">
+  <ng-content></ng-content>
+</button>
