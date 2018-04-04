@@ -1,0 +1,45 @@
+<div class="padding-15">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>Button Component Example</h4>
+      <hr>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <pfng-button tooltip="This is a default button"
+                     (onSelect)="handleSelect($event)">Default</pfng-button>
+        <pfng-button tooltip="This is a primary button" type="primary"
+                     (onSelect)="handleSelect($event)">Primary</pfng-button>
+        <pfng-button tooltip="This is a secondary button" type="secondary"
+                     (onSelect)="handleSelect($event)">Secondary</pfng-button>
+        <pfng-button tooltip="This is a tertiary button" type="tertiary"
+                     (onSelect)="handleSelect($event)">Tertiary</pfng-button>
+        <pfng-button tooltip="This is a danger button" type="danger"
+                     (onSelect)="handleSelect($event)">Danger</pfng-button>
+      </div>
+    </div>
+  </div>
+  <div class="row padding-top-10">
+    <div class="col-sm-12">
+      <h4 class="actions-label">Actions</h4>
+      <hr/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <textarea rows="3" class="col-sm-12">{{actionsText}}</textarea>
+    </div>
+  </div>
+  <div>
+    <include-content src="src/app/button/example/button-example.component.html"></include-content>
+  </div>
+  <div>
+    <include-content src="src/app/button/example/button-example.component.ts"></include-content>
+  </div>
+  <div>
+    <h4>API Docs</h4>
+    <iframe class="demoframe" src="docs/classes/buttoncomponent.html"></iframe>
+  </div>
+</div>
