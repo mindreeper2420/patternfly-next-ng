@@ -1,4 +1,5 @@
 export { ButtonComponent } from './button.component';
 export { ButtonModule } from './button.module';
-export { ButtonType } from './button-type';
+export { ButtonEvent } from './button-event';
+export { ButtonFormEncType, ButtonFormMethod, ButtonFormTarget, ButtonStyle, ButtonType } from './button-type';
 //# sourceMappingURL=index.js.map

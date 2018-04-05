@@ -4,7 +4,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import {ButtonComponent} from '../button.component';
+import {ButtonEvent} from '../button-event';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -13,6 +13,7 @@ import {ButtonComponent} from '../button.component';
 })
 export class ButtonExampleComponent implements OnInit {
   actionsText: string = '';
+  disabled: boolean = false;
 
   constructor() {
   }
@@ -20,7 +21,11 @@ export class ButtonExampleComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  handleSelect(button: ButtonComponent): void {
-    this.actionsText = button.type + ' selected\n' + this.actionsText;
+  handleClick($event: ButtonEvent): void {
+    this.actionsText =
+      'eventName: ' + $event.eventName +
+      ', id: ' + $event.id +
+      ', value: ' + $event.value +
+      '\n' + this.actionsText;
   }
 }
