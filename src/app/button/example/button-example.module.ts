@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { ButtonExampleComponent } from './button-example.component';
@@ -12,7 +13,8 @@ import { DemoComponentsModule } from '../../../demo/components/demo-components.m
   imports: [
     ButtonModule,
     CommonModule,
-    DemoComponentsModule
+    DemoComponentsModule,
+    FormsModule
   ],
   providers: []
 })

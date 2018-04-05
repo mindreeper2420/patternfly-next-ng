@@ -3,9 +3,21 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { ButtonComponent } from './button.component';
-import { ButtonType } from './button-type';
+import { ButtonEvent } from './button-event';
+import {
+  ButtonFormEncType,
+  ButtonFormMethod,
+  ButtonFormTarget,
+  ButtonStyle,
+  ButtonType
+} from './button-type';
 
 export {
+  ButtonEvent,
+  ButtonFormEncType,
+  ButtonFormMethod,
+  ButtonFormTarget,
+  ButtonStyle,
   ButtonType
 };
 
@@ -18,6 +30,10 @@ export {
     FormsModule
   ],
   declarations: [ButtonComponent],
-  exports: [ButtonComponent]
+  exports: [
+    ButtonComponent,
+    CommonModule,
+    FormsModule
+  ]
 })
 export class ButtonModule {}
