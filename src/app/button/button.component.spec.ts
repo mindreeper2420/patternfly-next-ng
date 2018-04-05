@@ -8,7 +8,7 @@ import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 import { ButtonComponent } from './button.component';
-import { ButtonType } from './button-type';
+import { ButtonStyle } from './button-type';
 
 describe('Button component - ', () => {
   let comp: ButtonComponent;
@@ -41,7 +41,7 @@ describe('Button component - ', () => {
   });
 
   it('should have type danger', () => {
-    comp.type = ButtonType.DANGER;
+    comp.style = ButtonStyle.DANGER;
     fixture.detectChanges();
 
     let button = fixture.debugElement.query(By.css('.pf-c-button.pf-is-danger'));
@@ -49,7 +49,7 @@ describe('Button component - ', () => {
   });
 
   it('should have type primary', () => {
-    comp.type = ButtonType.PRIMARY;
+    comp.style = ButtonStyle.PRIMARY;
     fixture.detectChanges();
 
     let button = fixture.debugElement.query(By.css('.pf-c-button.pf-is-primary'));
@@ -57,7 +57,7 @@ describe('Button component - ', () => {
   });
 
   it('should have type secondary', () => {
-    comp.type = ButtonType.SECONDARY;
+    comp.style = ButtonStyle.SECONDARY;
     fixture.detectChanges();
 
     let button = fixture.debugElement.query(By.css('.pf-c-button.pf-is-secondary'));
@@ -65,7 +65,7 @@ describe('Button component - ', () => {
   });
 
   it('should have type tertiary', () => {
-    comp.type = ButtonType.TERTIARY;
+    comp.style = ButtonStyle.TERTIARY;
     fixture.detectChanges();
 
     let button = fixture.debugElement.query(By.css('.pf-c-button.pf-is-tertiary'));
@@ -74,7 +74,7 @@ describe('Button component - ', () => {
 
   it('should call a function when button is clicked', () => {
     let event: any = null;
-    comp.onSelect.subscribe(($event: ButtonComponent) => {
+    comp.onClick.subscribe(($event: ButtonComponent) => {
       event = $event;
     });
     let button = fixture.debugElement.query(By.css('.pf-c-button'));
