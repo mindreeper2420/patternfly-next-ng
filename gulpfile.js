@@ -22,7 +22,12 @@ var libraryBuild = 'build';
 var libraryDist = 'dist';
 var demoDist = 'dist-demo';
 var watchDist = 'dist-watch';
-var globalExcludes = [ '!./**/example/**', '!./**/example', '!./**/demo/**', '!./**/demo.*' ];
+var globalExcludes = [
+  '!./**/example/**',
+  '!./**/example',
+  '!./**/demo/**',
+  '!./**/demo.*'
+];
 
 /**
  * FUNCTION LIBRARY

@@ -1,5 +1,3 @@
-export { PatternFlyNgModule } from './patternfly-ng.module';
-
 // Button
 export {
   ButtonComponent,

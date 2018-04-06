@@ -5,19 +5,19 @@ const path = require('path');
 /**
  * Webpack Plugins
  */
-const AotPlugin = require('@ngtools/webpack').AotPlugin; // Angular 4
-// const AotPlugin = require('@ngtools/webpack').AngularCompilerPlugin; // Angular 5
-const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+// const AotPlugin = require('@ngtools/webpack').AotPlugin; // Angular 4
+const AotPlugin = require('@ngtools/webpack').AngularCompilerPlugin; // Angular 5
+// const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const DefinePlugin = require('webpack/lib/DefinePlugin');
+// const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
+// const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+// const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+// const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
+// const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+// const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const TsConfigPathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
@@ -26,6 +26,8 @@ const extractCSS = new ExtractTextPlugin({
   filename: '[name].[id].css',
   allChunks: true
 });
+
+const aotMode = true;
 
 module.exports = {
   devServer: {
@@ -38,8 +40,11 @@ module.exports = {
   entry: {
     'polyfills': './src/polyfills.ts',
     'vendor': './src/vendor.ts',
-    'app': './src/demo.ts'
+    // 'app': './src/demo.ts'
+    'app': aotMode ? './src/demo-aot.ts' : './src/demo.ts'
   },
+
+  mode: 'development',
 
   resolve: {
     extensions: ['.webpack.js', '.wep.js', '.js', '.ts']
@@ -54,18 +59,33 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
+        use: aotMode ? [
+          '@ngtools/webpack'
+        ] : [
+          'awesome-typescript-loader',
+          'angular2-template-loader'
+        ],
+        /*
         loaders: [
           'awesome-typescript-loader',
           'angular2-template-loader'
         ],
+        */
         exclude: [/\.(spec|e2e)\.ts$/]
       },
+
+      /* Raw loader support for *.html
+       * Returns file content as string
+       *
+       * See: https://github.com/webpack/raw-loader
+       */
       {
         test: /\.html$/,
-        loader: 'html-loader'
+        use: ['html-loader']
+        // loader: 'html-loader'
       }, {
         test: /node_modules\/@swimlane\/ngx-datatable\/.*\.css$/,
-        loaders: [
+        use: [
           {
             loader: 'to-string-loader'
           }, {
@@ -75,14 +95,66 @@ module.exports = {
             }
           }
         ],
-      }, {
+      },
+
+      /*
+       * to string and css loader support for *.css files
+       * Returns file content as string
+       *
+       */
+      {
+        test: /\.css$/,
+        use: extractCSS.extract({
+          fallback: "style-loader",
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                context: '/'
+              },
+            },
+          ]
+        }),
+        exclude: [/node_modules\/@swimlane\/ngx-datatable/]
+      },
+/*
+      {
         test: /\.css$/,
         loader: extractCSS.extract({
           fallback: "style-loader",
           use: "css-loader?sourceMap&context=/"
         }),
         exclude: [/node_modules\/@swimlane\/ngx-datatable/]
-      }, {
+      },
+*/
+      {
+        test: /\.less$/,
+        use: [{
+          loader: 'css-to-string-loader'
+        }, {
+          loader: 'css-loader',
+          options: {
+            minimize: true,
+            sourceMap: true,
+            context: '/'
+          }
+        }, {
+          loader: 'less-loader',
+          options: {
+            paths: [
+              path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
+              path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
+              path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
+              path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
+            ],
+            sourceMap: true
+          }
+        }
+        ]
+      },
+  /*
+      {
         test: /\.less$/,
         loaders: [
           {
@@ -102,9 +174,40 @@ module.exports = {
           }
         ]
       },
+*/
 
-      /* File loader for supporting fonts, for example, in CSS files.
+      /**
+       * File loader for supporting fonts, for example, in CSS files.
        */
+      {
+        test: /\.(woff2|woff|ttf|eot|svg)$/,
+        use: {
+          loader: 'url-loader',
+          query: {
+            limit: 3000,
+            includePaths: [
+              path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
+            ],
+            name: 'assets/fonts/[name].[ext]'
+          }
+        },
+        exclude: path.resolve(__dirname, "../src/demo/images/")
+      },
+      {
+        test: /\.(jpg|png|svg|gif|jpeg)$/,
+        use: {
+          loader: 'url-loader',
+          query: {
+            limit: 3000,
+            includePaths: [
+              path.resolve(__dirname, "../src/demo/images/")
+            ],
+            name: 'assets/images/[name].[ext]'
+          }
+        },
+        exclude: path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
+      }
+/*
       {
         test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
         loaders: [
@@ -128,6 +231,7 @@ module.exports = {
           }
         ]
       }
+*/
     ]
   },
 
@@ -137,6 +241,18 @@ module.exports = {
     filename: '[name].js',
     chunkFilename: '[id].chunk.js',
     sourceMapFilename: '[name].map'
+  },
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all"
+        }
+      }
+    }
   },
 
   plugins: [
@@ -149,9 +265,9 @@ module.exports = {
      * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
      * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
      */
-    new CommonsChunkPlugin({
-      name: ['app', 'vendor', 'polyfills']
-    }),
+    // new CommonsChunkPlugin({
+    //  name: ['app', 'vendor', 'polyfills']
+    // }),
 
     /*
      * Plugin: HtmlWebpackPlugin
@@ -198,19 +314,10 @@ module.exports = {
       includeDeclarations: false,
       ignoreCompilerErrors: true,
       excludePrivate: true,
-      exclude: '**/+(example|demo)/**'
+      excludeProtected: true,
+      exclude: ['**/+(example|demo)/**', '**/+(demo-aot)**'],
+      tsconfig: 'tsconfig.json'
     }, './src'),
-
-    /**
-     * Plugin: AotPlugin
-     * Description: Angular Ahead-of-Time Webpack Plugin
-     *
-     * See: https://www.npmjs.com/package/@ngtools/webpack
-     */
-    new AotPlugin({
-      entryModule: helpers.root('src/demo/app.module.ts#AppModule'),
-      tsConfigPath: helpers.root('tsconfig-aot.json')
-    }),
 
     /**
      * Plugin: copy-webpack-plugin
@@ -220,6 +327,19 @@ module.exports = {
      */
     new CopyWebpackPlugin([{
       from: helpers.root('README.md')
-    }]),
+    }])
   ]
 };
+
+/**
+ * Plugin: AotPlugin
+ * Description: Angular Ahead-of-Time Webpack Plugin
+ *
+ * See: https://www.npmjs.com/package/@ngtools/webpack
+ */
+if (aotMode) {
+  module.exports.plugins.push(new AotPlugin({
+    entryModule: helpers.root('src/demo/app.module.ts#AppModule'),
+    tsConfigPath: helpers.root('tsconfig-aot.json')
+  }));
+}

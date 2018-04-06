@@ -9,15 +9,15 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
 /**
  * Webpack Plugins
  */
-const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
-const DefinePlugin = require('webpack/lib/DefinePlugin');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-const WebpackMd5Hash = require('webpack-md5-hash');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
+// const DefinePlugin = require('webpack/lib/DefinePlugin');
+// const IgnorePlugin = require('webpack/lib/IgnorePlugin');
+// const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+// const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
+// const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+// const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+// const WebpackMd5Hash = require('webpack-md5-hash');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 /**
  * Webpack Constants

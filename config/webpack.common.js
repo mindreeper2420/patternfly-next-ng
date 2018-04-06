@@ -9,16 +9,16 @@ const path = require('path'),
 /**
  * Webpack Plugins
  */
-const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const DefinePlugin = require('webpack/lib/DefinePlugin');
+// const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+// const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
-const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
+// const IgnorePlugin = require('webpack/lib/IgnorePlugin');
+// const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+// const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+// const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+// const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
 // ExtractTextPlugin
 const extractCSS = new ExtractTextPlugin({
@@ -41,13 +41,18 @@ module.exports = {
   module: {
     rules: [
       {
-        enforce: 'pre',
         test: /\.ts$/,
+        enforce: 'pre',
         use: 'tslint-loader',
         exclude: [helpers.root('node_modules')]
       },
       {
         test: /\.ts$/,
+        use: [
+          'awesome-typescript-loader',
+          'angular2-template-loader'
+        ],
+        /*
         use: [
           {
             loader: 'awesome-typescript-loader',
@@ -59,17 +64,72 @@ module.exports = {
             loader: 'angular2-template-loader'
           }
         ],
+        */
         exclude: [/\.spec\.ts$/]
-      },{
-        test: /\.css$/,
-        loader: extractCSS.extract({
-          fallback: "style-loader",
-          use: "css-loader?sourceMap&context=/"
-        })
       },
 
-      /* File loader for supporting fonts, for example, in CSS files.
+      /*
+       * to string and css loader support for *.css files
+       * Returns file content as string
+       *
        */
+      {
+        test: /\.css$/,
+        use: extractCSS.extract({
+          fallback: "style-loader",
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                context: '/'
+              },
+            },
+          ]
+        })
+      },
+      /*
+            {
+              test: /\.css$/,
+              loader: extractCSS.extract({
+                fallback: "style-loader",
+                use: "css-loader?sourceMap&context=/"
+              })
+            },
+      */
+
+      /**
+       * File loader for supporting fonts, for example, in CSS files.
+       */
+      {
+        test: /\.(woff2|woff|ttf|eot|svg)$/,
+        use: {
+          loader: 'url-loader',
+          query: {
+            limit: 3000,
+            // includePaths: [
+            //   path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
+            // ],
+            name: 'assets/fonts/[name].[ext]'
+          }
+        },
+        exclude: path.resolve(__dirname, "../src/demo/images/")
+      },
+      {
+        test: /\.(jpg|png|svg|gif|jpeg)$/,
+        use: {
+          loader: 'url-loader',
+          query: {
+            limit: 3000,
+            includePaths: [
+              path.resolve(__dirname, "../src/assets/images/")
+            ],
+            name: 'assets/images/[name].[ext]'
+          }
+        },
+        exclude: path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
+      },
+/*
       {
         test: /\.(woff2|woff|ttf|eot|svg)$/,
         use: {
@@ -96,7 +156,7 @@ module.exports = {
         },
         exclude: path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
       },
-
+*/
       // Support for *.json files.
       {
         test: /\.json$/,
@@ -109,6 +169,18 @@ module.exports = {
         use: ['raw-loader']
       }
     ]
+  },
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all"
+        }
+      }
+    }
   },
 
   plugins: [
