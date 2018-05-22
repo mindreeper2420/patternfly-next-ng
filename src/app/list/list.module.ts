@@ -9,16 +9,12 @@ import { ListComponent } from './basic-list/list.component';
 import { ListModule as BasicListModule } from './basic-list/list.module';
 import { ListConfig } from './basic-list/list-config';
 import { ListExpandToggleComponent } from './basic-list/list-expand-toggle.component';
-import { TreeListComponent } from './tree-list/tree-list.component';
-import { TreeListConfig } from './tree-list/tree-list-config';
-import { TreeListModule } from './tree-list/tree-list.module';
 
 export {
   ListBase,
   ListConfigBase,
   ListConfig,
-  ListEvent,
-  TreeListConfig
+  ListEvent
 };
 
 /**
@@ -35,10 +31,9 @@ export {
   imports: [
     BasicListModule,
     CommonModule,
-    FormsModule,
-    TreeListModule
+    FormsModule
   ],
-  exports: [ListComponent, ListExpandToggleComponent, TreeListComponent]
+  exports: [ListComponent, ListExpandToggleComponent]
 })
 export class ListModule {
   constructor() {
