@@ -75,7 +75,7 @@
     "rxjs": "^6.1.0"
   },
   "dependencies": {
-    "@patternfly/patternfly-next-workshop": "0.0.4",
+    "@patternfly/patternfly-next": "^1.0.4",
     "lodash": "^4.17.10",
     "patternfly": "^3.51.0"
   },
