@@ -117,6 +117,7 @@ module.exports = {
           loader: 'less-loader',
           options: {
             paths: [
+              path.resolve(__dirname, "../node_modules"),
               path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
               path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
               path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
