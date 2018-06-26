@@ -7,23 +7,25 @@ const path = require('path');
  */
 const AotPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
 
-// ExtractTextPlugin
-const extractCSS = new ExtractTextPlugin({
-  filename: '[name].[id].css',
-  allChunks: true
+// MiniCssExtractPlugin
+const extractCSS = new MiniCssExtractPlugin({
+  filename: '[name].css',
+  chunkFilename: "[id].css"
 });
 
-const aotMode = true;
+// NOTE: AOT is temporarily disabled because mini-css-extract-plugin has an issue with AngularCompilerPlugin
+// See: https://github.com/webpack-contrib/mini-css-extract-plugin/issues/186
+const aotMode = false;
 
 module.exports = {
   devServer: {
-    stats: 'minimal',
-    inline: true
+    inline: true,
+    stats: 'minimal'
   },
 
   devtool: 'cheap-module-eval-source-map',
@@ -52,7 +54,6 @@ module.exports = {
         use: aotMode ? [
           '@ngtools/webpack'
         ] : [
-          // 'awesome-typescript-loader',
           'ts-loader',
           'angular2-template-loader'
         ],
@@ -88,19 +89,14 @@ module.exports = {
        */
       {
         test: /\.css$/,
-        use: extractCSS.extract({
-          fallback: "style-loader",
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                context: '/'
-              },
-            },
-          ]
-        }),
-        exclude: [/node_modules\/@swimlane\/ngx-datatable/]
+        use: [
+          MiniCssExtractPlugin.loader, {
+            loader: "css-loader",
+            options: {
+              minimize: true,
+              sourceMap: true
+            }
+          }]
       },
       {
         test: /\.less$/,
@@ -175,7 +171,7 @@ module.exports = {
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
+          name: "styles",
           chunks: "all"
         }
       }

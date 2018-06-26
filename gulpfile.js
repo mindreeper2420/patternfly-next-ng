@@ -129,6 +129,12 @@ gulp.task('build',
 
 // Build the components
 gulp.task('transpile', ['inline-template'], function () {
+  // Stick with v0.2.1 due to "function calls are not supported in decorators" issue
+  // See: https://github.com/angular/angular/issues/23609
+  // See: https://github.com/dherges/ng-packagr/issues/727
+
+  // Change for v0.3.0 https://github.com/filipesilva/angular-quickstart-lib/issues/61
+  // return ngc(['--project', 'tsconfig-prod.json']);
   return ngc('tsconfig-prod.json');
 });
 

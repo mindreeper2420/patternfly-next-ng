@@ -9,14 +9,14 @@ const path = require('path'),
 /**
  * Webpack Plugins
  */
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 
-// ExtractTextPlugin
-const extractCSS = new ExtractTextPlugin({
-  filename: '[name].[id].css',
-  allChunks: true
+// MiniCssExtractPlugin
+const extractCSS = new MiniCssExtractPlugin({
+  filename: '[name].css',
+  chunkFilename: "[id].css"
 });
 
 module.exports = {
@@ -56,18 +56,14 @@ module.exports = {
        */
       {
         test: /\.css$/,
-        use: extractCSS.extract({
-          fallback: "style-loader",
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                sourceMap: true,
-                context: '/'
-              },
-            },
-          ]
-        })
+        use: [
+          MiniCssExtractPlugin.loader, {
+            loader: "css-loader",
+            options: {
+              minimize: true,
+              sourceMap: true
+            }
+          }]
       },
 
       /**
@@ -113,20 +109,22 @@ module.exports = {
       }
     ]
   },
-
+/*
   optimization: {
     splitChunks: {
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
+          name: "styles",
           chunks: "all"
         }
       }
     }
   },
-
+*/
   plugins: [
+    extractCSS,
+
     /**
      * Plugin: ContextReplacementPlugin
      * Description: Provides context to Angular's use of System.import
@@ -188,7 +186,6 @@ module.exports = {
       root: helpers.root(),
       verbose: false,
       dry: false
-    }),
-    extractCSS
+    })
   ]
 };
